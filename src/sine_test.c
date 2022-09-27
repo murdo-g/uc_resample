@@ -5,7 +5,7 @@
 #define BLOCKSIZE 128
 #define ORIGINAL_SR 48000
 #define SAMPLE_DUR_S 10
-#define RESAMPLE_FACTOR 1.01
+#define RESAMPLE_FACTOR 0.4
 
 int readData(FILE* inputfile, HWORD* inputBuf, int arraySize, int Xoff) {
     int    i, Nsamps, nret;
@@ -20,7 +20,7 @@ int main() {
     FILE *input;
     input = fopen("../sine440.raw", "r");
     FILE *output;
-    output = fopen("../sine444.raw", "w");
+    output = fopen("../sinerepitched.raw", "w");
     printf("=========================\nuc_resample Test.\n\n");
 
     resample_t resample;

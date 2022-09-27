@@ -136,9 +136,9 @@ static int resampleInit(
     UWORD obufsize,
     double factor
 ) {
-    resampler->OBUFFSIZE = obufsize;
-    resampler->IBUFFSIZE = (int)(((double)resampler->OBUFFSIZE)/factor);
     resampler->Xoff = 10;
+    resampler->OBUFFSIZE = obufsize;
+    resampler->IBUFFSIZE = (int)(((double)resampler->OBUFFSIZE)/factor)+ 2*resampler->Xoff;
     resampler->Nx = resampler->IBUFFSIZE - 2*resampler->Xoff;     /* # of samples to process each iteration */
     resampler->last = 0;                   /* Have not read last input sample yet */
     resampler->Xp = resampler->Xoff;                  /* Current "now"-sample pointer for input */
@@ -163,6 +163,9 @@ static int resampleFast(
     double factor               /* Resampler factor */
 ) {
     UHWORD Nout = SrcLinear(input, output, factor, &resampler->Time, resampler->Nx);
+    #ifdef PRINTDEBUGINFO
+        printf("Nx: %d, Nout: %d\n", resampler->Nx, Nout);
+    #endif
     resampler->Time -= (resampler->Nx<<Np);       /* Move converter Nx samples back in time */
     resampler->Xp += resampler->Nx;               /* Advance by number of samples processed */
     resampler->Ncreep = (resampler->Time>>Np) - resampler->Xoff; /* Calc time accumulation in Time */
